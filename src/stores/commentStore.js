@@ -18,6 +18,7 @@ const CommentStore = Object.assign({}, EventEmitter.prototype, {
 })
 
 appDispathcer.register((action) => {
+  // eslint-disable-next-line
   switch (action.type) {
     case 'GET_LIST_SUCCESS': {
       comments = action.payload.comment
