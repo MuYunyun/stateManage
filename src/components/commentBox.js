@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
 import CommentInput from './commentInput'
 import CommentList from './commentList'
+import commentAction from '../actions/commentAction'
+import commentStore from '../stores/commentStore'
 
 class CommentBox extends Component {
   constructor() {
     super()
     this.state = {
-      fetchPromise: fetch('./list.json')
+      comment: commentStore.getComment()
     }
   }
 
+  componentDidMount() {
+    commentStore.addListener(() => this.setState({
+      comment: commentStore.getComment()
+    }))
+  }
+
   handleSearch() {
-    fetch('./submit.json')
-      .then((res) => res.json())
-      .then(result => result.data ? this.setState({ fetchPromise: fetch('./list.json') }) : '')
+    commentAction.submit()
   }
 
   render() {
     return (
       <div>
         <CommentInput handleSearch={this.handleSearch.bind(this)} />
-        <CommentList fetchPromise={this.state.fetchPromise} />
+        <CommentList comment={this.state.comment} />
       </div>
     )
   }
